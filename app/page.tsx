@@ -3,15 +3,30 @@
 import { useState } from "react";
 import styles from "../styles/Home.module.css";
 
+interface GeolocationData {
+  geo?: {
+    latitude?: number;
+    longitude?: number;
+    city?: string;
+    country_code2?: string;
+  };
+  zipcode?: string;
+  useragent?: {
+    name?: string;
+    type?: string;
+    version?: string;
+  };
+}
+
 export default function Home() {
-  const [geoData, setGeoData] = useState<any>(null);
+  const [geoData, setGeoData] = useState<GeolocationData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const detectLocation = async () => {
     setLoading(true);
     try {
       const response = await fetch("/api/detect");
-      const data = await response.json();
+      const data: GeolocationData = await response.json();
       setGeoData(data);
     } catch (error) {
       console.error("Error fetching geolocation:", error);
